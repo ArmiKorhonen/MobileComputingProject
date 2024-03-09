@@ -31,3 +31,7 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Google Maps API Key
+/app/src/main/res/values/google_maps_api.xml
+
