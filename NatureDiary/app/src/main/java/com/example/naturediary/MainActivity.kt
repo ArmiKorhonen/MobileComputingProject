@@ -12,35 +12,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.naturediary.ui.theme.NatureDiaryTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            NatureDiaryTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
+import com.example.naturediary.navigation.Screen
+
+import com.example.naturediary.screens.MainScreen
+import com.example.naturediary.screens.AddEntryScreen
+import com.example.naturediary.screens.EntriesListScreen
+import com.example.naturediary.screens.EntryDetailScreen
+import com.example.naturediary.screens.MapViewScreen
+
+
+
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+        composable(Screen.MainScreen.route) {
+            MainScreen(navController)
+        }
+        composable(Screen.AddEntryScreen.route) {
+            AddEntryScreen(navController)
+        }
+        composable(Screen.EntriesListScreen.route) {
+            EntriesListScreen(navController)
+        }
+        composable(Screen.EntryDetailScreen.route) { backStackEntry ->
+            // Extract the entryId from the arguments
+            val entryId = backStackEntry.arguments?.getString("entryId")
+            EntryDetailScreen(entryId, navController)
+        }
+        composable(Screen.MapViewScreen.route) {
+            MapViewScreen(navController)
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NatureDiaryTheme {
-        Greeting("Android")
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            AppNavigation()
+        }
     }
 }
