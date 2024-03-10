@@ -97,9 +97,19 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.51")
     kapt ("com.google.dagger:hilt-compiler:2.51")
 
-    //Current location
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
-    implementation ("androidx.compose.runtime:runtime-livedata:<compose_version>")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
+
+
+        val camerax_version = "1.2.2"
+        implementation ("androidx.camera:camera-core:${camerax_version}")
+        implementation ("androidx.camera:camera-camera2:${camerax_version}")
+        implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
+        implementation ("androidx.camera:camera-video:${camerax_version}")
+
+        implementation ("androidx.camera:camera-view:${camerax_version}")
+        implementation ("androidx.camera:camera-extensions:${camerax_version}")
+
+
 
 }
 
