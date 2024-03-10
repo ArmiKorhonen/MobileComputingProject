@@ -96,5 +96,10 @@ dependencies {
     //Hilt
     implementation ("com.google.dagger:hilt-android:2.51")
     kapt ("com.google.dagger:hilt-compiler:2.51")
+
+    //Current location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:<compose_version>")
+
 }
 
