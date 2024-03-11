@@ -4,6 +4,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -66,6 +67,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:2.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.room:room-common:2.6.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -100,7 +102,7 @@ dependencies {
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
 
 
-        val camerax_version = "1.2.2"
+        val camerax_version = "1.3.2"
         implementation ("androidx.camera:camera-core:${camerax_version}")
         implementation ("androidx.camera:camera-camera2:${camerax_version}")
         implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
@@ -109,6 +111,11 @@ dependencies {
         implementation ("androidx.camera:camera-view:${camerax_version}")
         implementation ("androidx.camera:camera-extensions:${camerax_version}")
 
+    //Room
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-ktx:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
 
 }
