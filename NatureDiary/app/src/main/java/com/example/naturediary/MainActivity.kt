@@ -23,7 +23,7 @@ import com.example.naturediary.screens.AddEntryScreen
 import com.example.naturediary.screens.EntriesListScreen
 import com.example.naturediary.screens.EntryDetailScreen
 import com.example.naturediary.screens.MapViewScreen
-
+import dagger.hilt.android.AndroidEntryPoint
 
 
 @Composable
@@ -35,7 +35,8 @@ fun AppNavigation() {
             MainScreen(navController)
         }
         composable(Screen.AddEntryScreen.route) {
-            AddEntryScreen(navController)
+            AddEntryScreen(
+                navController)
         }
         composable(Screen.EntriesListScreen.route) {
             EntriesListScreen(navController)
@@ -51,6 +52,7 @@ fun AppNavigation() {
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

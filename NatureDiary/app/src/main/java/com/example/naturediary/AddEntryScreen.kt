@@ -106,7 +106,9 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
                     val diaryEntry = DiaryEntry(
                         note = noteText,
                         latitude = locationPair?.first ?: 0.0,
-                        longitude = locationPair?.second ?: 0.0
+                        longitude = locationPair?.second ?: 0.0,
+                        address = address ?: "Address not available",
+                        timestamp = System.currentTimeMillis()
                     )
                     db.diaryEntryDAO().insert(diaryEntry)
                     // Set the flag to show the confirmation dialog

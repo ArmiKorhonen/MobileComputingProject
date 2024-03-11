@@ -9,5 +9,6 @@ data class DiaryEntry(
     val note: String,
     val latitude: Double,
     val longitude: Double,
-    // Add new fields here later
+    val address: String, // Ensure you've added this previously
+    val timestamp: Long // New field to store date and time
 )

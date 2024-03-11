@@ -2,9 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id ("kotlin-kapt")
+    kotlin("kapt")
     id ("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -98,6 +97,7 @@ dependencies {
     //Hilt
     implementation ("com.google.dagger:hilt-android:2.51")
     kapt ("com.google.dagger:hilt-compiler:2.51")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.3")
 
@@ -114,9 +114,13 @@ dependencies {
     //Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    //annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
 
 }
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
