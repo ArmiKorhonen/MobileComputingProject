@@ -10,27 +10,9 @@ Nature Diary is an Android application designed to enable users to document thei
 
 - **Location-Based Entries**: Automatically captures the user's location for each diary entry.
 - **Weather Data**: Integrates current weather data, including temperature, for the location of each entry.
-- **Entries Management**: Allows users to view, edit, and delete diary entries.
+- **List Previous Entries**: Allows users to list all previous entries and view them in detail.
 - **Entry Details**: Users can view details of each entry, including location on a map and weather conditions at the time of the entry.
 - **Adaptive UI**: Supports light and dark mode themes, adapting to the user's device settings.
-
-
-Certainly! Below is a description of the features and functionality of your Nature Diary app that you can use for your README.md file. This description outlines the app's purpose, core features, and the technology stack used.
-
----
-
-# Nature Diary App
-
-## Overview
-
-Nature Diary is an Android application designed for nature enthusiasts to record and reflect on their outdoor experiences. By leveraging the power of Jetpack Compose for UI design and the robustness of Room for data persistence, Nature Diary offers an intuitive and seamless way to capture memories, observations, and thoughts related to nature. Whether you're hiking, bird watching, or simply enjoying a moment in your backyard, Nature Diary helps you document these experiences with ease.
-
-## Features
-
-- **Location-Based Entries**: Automatically record your current location with each diary entry, allowing you to reflect on where you've been and what you've observed.
-- **Weather Integration**: Get real-time weather data (temperature) for your current location to include in your diary entries, providing context to your experiences.
-- **View Entries**: Easily view all your diary entries in a list.
-- **Detailed Entry View**: Tap on an entry to see detailed information, including the exact location on a map, the weather at the time of the entry, and any notes you've made.
 
 ## Technology Stack
 
