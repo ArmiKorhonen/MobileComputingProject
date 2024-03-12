@@ -14,5 +14,7 @@ interface DiaryEntryDAO {
     @Query("SELECT * FROM diary_entry_table ORDER BY timestamp DESC")
     fun getAllEntriesSortedByDate(): Flow<List<DiaryEntry>>
 
-    // Add methods to update or delete notes as needed
+    @Query("SELECT * FROM diary_entry_table WHERE id = :entryId")
+    fun getEntryById(entryId: Int): LiveData<DiaryEntry>
+
 }

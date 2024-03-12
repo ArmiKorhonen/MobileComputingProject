@@ -19,7 +19,16 @@ import androidx.compose.ui.unit.dp
 import com.example.naturediary.navigation.Screen
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,20 +39,47 @@ import com.example.naturediary.EntriesListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.naturediary.EntryItem
 import com.example.naturediary.temperatureColor
 
 
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntriesListScreen(navController: NavController, viewModel: EntriesListViewModel = hiltViewModel()) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("List of Diary Entries") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        androidx.compose.material3.Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
+
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                )
+            )
+        }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            //Page content here
+            EntriesListContent(navController = navController, viewModel = viewModel)
+        }
+    }
+}
+
+@Composable
+fun EntriesListContent(navController: NavController, viewModel: EntriesListViewModel) {
     val entries by viewModel.entries.observeAsState(initial = emptyList())
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Entries List", style = MaterialTheme.typography.displayMedium, modifier = Modifier.padding(bottom = 8.dp))
-        Button(onClick = { navController.navigateUp() }, modifier = Modifier.padding(bottom = 8.dp)) {
-            Text("Back to Main Screen")
-        }
 
         LazyColumn {
             items(entries, key = { entry ->
@@ -58,39 +94,7 @@ fun EntriesListScreen(navController: NavController, viewModel: EntriesListViewMo
 }
 
 
-@Composable
-fun EntryItem(entry: DiaryEntry, onClick: () -> Unit) {
-    val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-    Card(
-        modifier = Modifier
-            .padding(vertical = 4.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            // Temperature circle on the left
-            Box(modifier = Modifier.size(60.dp)) {
-                Canvas(modifier = Modifier.matchParentSize()) {
-                    drawCircle(color = temperatureColor(entry.temperature))
-                }
-                // Text is absolutely positioned to be centered within the Box
-                Text(
-                    text = "${entry.temperature}°C",
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Date, time, and address on the right
-            Column {
-                Text(text = sdf.format(Date(entry.timestamp)), style = MaterialTheme.typography.titleLarge)
-                Text(text = entry.address, style = MaterialTheme.typography.bodyLarge)
-            }
-        }
-    }
-}
 
 
 

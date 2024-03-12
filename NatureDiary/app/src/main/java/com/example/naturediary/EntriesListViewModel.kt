@@ -1,5 +1,6 @@
 package com.example.naturediary
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,5 +19,10 @@ class EntriesListViewModel @Inject constructor(private val diaryEntryDAO: DiaryE
             diaryEntryDAO.insert(diaryEntry)
         }
     }
+
+    fun getEntryById(entryId: Int): LiveData<DiaryEntry> {
+        return diaryEntryDAO.getEntryById(entryId)
+    }
+
 }
 

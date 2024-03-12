@@ -33,7 +33,15 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -50,22 +58,47 @@ import java.net.URL
 import org.json.JSONObject
 import kotlinx.coroutines.*
 import com.example.naturediary.temperatureColor
+import com.example.naturediary.EntryItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEntryScreen(navController: NavController, locationViewModel: LocationViewModel = viewModel(), entriesViewModel: EntriesListViewModel = hiltViewModel()) {
 
-    NatureDiaryTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Add New Diary Entry") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        androidx.compose.material3.Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Go back"
+                        )
+                    }
 
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                )
+            )
+        }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            //Page content here
             AddEntryScreenContent(navController= navController, locationViewModel = locationViewModel, entriesViewModel = entriesViewModel)
+
         }
     }
+
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEntryScreenContent(navController: NavController, locationViewModel: LocationViewModel, entriesViewModel: EntriesListViewModel) {
     val context = LocalContext.current
@@ -78,14 +111,13 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
     val locationPair = locationViewModel.locationData.observeAsState().value
     val address = locationViewModel.addressData.observeAsState().value
     var temperature by remember { mutableStateOf<Double?>(null) }
-
+    val currentDate = System.currentTimeMillis()
+    val dateWithoutTime = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val currentDateTime = dateWithoutTime.format(Date(currentDate))
 
     locationViewModel.fetchLastLocation()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Add New Entry", style = MaterialTheme.typography.titleLarge)
-
-
 
         locationPair?.let { pair ->
             val location = LatLng(pair.first, pair.second)
@@ -104,24 +136,24 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
 
-
-        temperature?.let { temp ->
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
-                Canvas(modifier = Modifier
-                    .size(60.dp)
-                    .align(Alignment.Center)) {
-                    drawCircle(color = temperatureColor(temp))
-                }
-                Text(text = "${temp}°C", color = Color.White)
-            }
-        }
-
-        address?.let {
-            Text(text = it, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
-        }
-
+        EntryItem(
+            entry = DiaryEntry(
+                id = 0, // Temporary ID for UI purposes, since this is not a saved entry yet
+                note = "", // This will be empty since it's not used in this context
+                latitude = 0.0, // This will be empty since it's not used in this context
+                longitude = 0.0, // This will be empty since it's not used in this context
+                address = address ?: "Address not available",
+                timestamp = currentDate,
+                temperature = temperature ?: 0.0 // Replace with actual temperature
+            ),
+            onClick = null // No click action needed here
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer),
             value = noteText,
             onValueChange = { noteText = it },
             modifier = Modifier
@@ -154,11 +186,10 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
             Text("Save Entry")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        Button(modifier = Modifier.padding(top = 8.dp), onClick = { navController.navigateUp() }) {
-            Text("Back to Main Screen")
-        }
+
+
+
 
         if (showConfirmationDialog) {
             AlertDialog(
