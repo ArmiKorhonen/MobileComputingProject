@@ -1,3 +1,12 @@
+/**
+ * File: DiaryEntryDAO.kt
+ *
+ * Description: This file defines the Data Access Object (DAO) for the DiaryEntry entities. It is an
+ * interface annotated with @Dao, providing the necessary methods to access the database. These methods
+ * include inserting a new diary entry and querying the database for all entries or a specific entry by
+ * its ID. The results are observed through LiveData and Flow, enabling reactive UI updates.
+ */
+
 package com.example.naturediary
 
 import androidx.lifecycle.LiveData

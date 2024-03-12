@@ -16,11 +16,18 @@ import com.example.naturediary.screens.MainScreen
 import com.example.naturediary.screens.AddEntryScreen
 import com.example.naturediary.screens.EntriesListScreen
 import com.example.naturediary.screens.EntryDetailScreen
-import com.example.naturediary.screens.MapViewScreen
 import com.example.naturediary.screens.AnimatedSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 
+/**
+ * AppNavigation
+ *
+ * Description: Defines the navigation graph for the application using Jetpack Compose. It utilizes
+ * the NavHost and composable functions to set up navigation between different screens within the app.
+ * This setup facilitates navigating to the MainScreen, AddEntryScreen, EntriesListScreen,
+ * EntryDetailScreen, and an AnimatedSplashScreen, enabling a fluid user experience.
+ */
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -40,23 +47,25 @@ fun AppNavigation() {
             EntriesListScreen(navController)
         }
         composable(Screen.EntryDetailScreen.route) { backStackEntry ->
-            // Extract the entryId from the arguments
             val entryId = backStackEntry.arguments?.getString("entryId")
             EntryDetailScreen(entryId, navController)
-        }
-        composable(Screen.MapViewScreen.route) {
-            MapViewScreen(navController)
         }
     }
 }
 
+/**
+ * File: MainActivity.kt
+ *
+ * Description: The entry point of the application. It sets up the app's theme and initializes the
+ * navigation for the app using Jetpack Compose. It inherits from ComponentActivity and utilizes
+ * Dagger-Hilt for dependency injection.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             NatureDiaryTheme {
-                // Surface will use the background color from the theme by default
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

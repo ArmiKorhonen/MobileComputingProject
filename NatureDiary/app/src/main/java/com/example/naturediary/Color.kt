@@ -1,3 +1,12 @@
+/**
+ * File: Color.kt
+ *
+ * Description: Defines the color palette for the application's light and dark themes. It includes colors for
+ * primary, onPrimary, primaryContainer, secondaryContainer, background, and secondary variations. These
+ * colors follow Material Design guidelines and are used throughout the app to ensure consistency and visual
+ * appeal in both light and dark modes.
+ */
+
 package com.example.naturediary
 
 import androidx.compose.ui.graphics.Color

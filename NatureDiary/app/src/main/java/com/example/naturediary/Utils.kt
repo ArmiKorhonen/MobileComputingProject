@@ -1,3 +1,14 @@
+/**
+ * File: Utils.kt
+ *
+ * Description: Contains utility functions and composable functions that provide reusable UI components and logic
+ * for the Nature Diary app. It includes a function for determining the color representation of temperatures, a
+ * composable function for displaying diary entries as cards in the UI, and a composable function for the app's
+ * leaf logo. The temperatureColor function dynamically adjusts the color based on the temperature value, enhancing
+ * data visualization. The EntryItem composable arranges diary entry data visually, and LeafLogo displays the app's
+ * logo with customizable positioning, supporting branding and design consistency across the app.
+ */
+
 package com.example.naturediary
 
 import androidx.compose.foundation.Canvas
@@ -6,7 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width

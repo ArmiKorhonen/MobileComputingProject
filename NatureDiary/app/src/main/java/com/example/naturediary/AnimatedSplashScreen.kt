@@ -1,37 +1,29 @@
+/**
+ * File: AnimatedSplashScreen.kt
+ *
+ * Description: This Composable function implements the animated splash screen of the application. It utilizes
+ * an Animatable float value to scale a logo with an animation effect. The animation enlarges the logo
+ * to 120% of its size and then scales it back to its original size. After the animation sequence completes,
+ * it navigates to the MainScreen. This screen serves as an engaging visual entry point for users when they
+ * open the app, enhancing the overall user experience by providing a dynamic start before transitioning
+ * to the app's main content.
+ */
+
 package com.example.naturediary.screens
 
 import androidx.compose.animation.core.Animatable
-import com.example.naturediary.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Box
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import kotlinx.coroutines.delay
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import com.example.naturediary.navigation.Screen
 import com.example.naturediary.LeafLogo
-
 
 @Composable
 fun AnimatedSplashScreen(navController: NavController) {

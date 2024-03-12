@@ -1,3 +1,16 @@
+/**
+ * File: AddEntryScreen.kt
+ *
+ * Description: The AddEntryScreen composable function is designed to provide the UI for adding new diary entries.
+ * It integrates with the LocationViewModel to fetch the current location and address, and with EntriesListViewModel
+ * to insert new diary entries into the database. The screen includes a map view showing the current location, fields
+ * for entering notes, and the capability to fetch and display the current temperature via an external weather API.
+ * Upon saving, it presents a confirmation dialog and navigates back to the previous screen. The screen is built using
+ * Scaffold and composes multiple custom composable functions like LocationSuccessUI for map display and uses a coroutine
+ * to asynchronously fetch weather data.
+ */
+
+
 package com.example.naturediary.screens
 
 import androidx.compose.foundation.layout.Column
@@ -7,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -18,8 +30,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.TextField
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.naturediary.ui.theme.NatureDiaryTheme
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -30,9 +40,7 @@ import com.example.naturediary.LocationViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
 import android.util.Log
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -44,20 +52,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.room.Room
 import com.example.naturediary.DiaryEntry
-import com.example.naturediary.DiaryEntryDatabase
 import com.example.naturediary.EntriesListViewModel
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
 import org.json.JSONObject
 import kotlinx.coroutines.*
-import com.example.naturediary.temperatureColor
 import com.example.naturediary.EntryItem
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -185,11 +188,6 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
         ) {
             Text("Save Entry")
         }
-
-
-
-
-
 
         if (showConfirmationDialog) {
             AlertDialog(

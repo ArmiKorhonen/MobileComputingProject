@@ -1,3 +1,12 @@
+/**
+ * File: Theme.kt
+ *
+ * Description: This file establishes the theme for the NatureDiary app by utilizing the MaterialTheme
+ * composable function from Jetpack Compose. It dynamically selects either a light or dark color scheme based
+ * on the system settings or an explicitly set theme preference. The color schemes are defined in the
+ * Color.kt file and include customizations for various UI elements to align with the app's design requirements.
+ */
+
 package com.example.naturediary
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,7 +22,6 @@ private val LightColorScheme = lightColorScheme(
     secondaryContainer = md_theme_light_secondaryContainer,
     background = md_theme_light_background,
     secondary = md_theme_light_secondary,
-    // ... other color definitions
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -23,7 +31,6 @@ private val DarkColorScheme = darkColorScheme(
     secondaryContainer = md_theme_dark_secondaryContainer,
     background = md_theme_dark_background,
     secondary = md_theme_dark_secondary,
-    // ... other color definitions
 )
 
 

@@ -1,7 +1,19 @@
+/**
+ * File: EntryDetailScreen.kt
+ *
+ * Description: The EntryDetailScreen is a Composable function dedicated to displaying the details of a specific diary entry.
+ * It is designed to show comprehensive information including the entry's location on a map, the note content, and other metadata
+ * such as the date and temperature when the entry was created. The screen features a Scaffold with a TopAppBar, including a back
+ * navigation icon. The entry's details are fetched from the database using the EntriesListViewModel based on the entry ID passed
+ * as a parameter. The function gracefully handles cases where the entry ID is null or invalid by navigating back. This screen
+ * enriches the user experience by providing a detailed view of their diary entries, fostering engagement with the content they've created.
+ */
+
 package com.example.naturediary.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,6 +21,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -44,7 +59,7 @@ fun EntryDetailScreen(entryId: String?, navController: NavController, viewModel:
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Diary Entry for ") },
+                title = { Text("Diary Entry") },
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.navigateUp()
@@ -90,9 +105,22 @@ fun EntryDetailContent(diaryEntry: DiaryEntry) {
 
         EntryItem(entry = diaryEntry)
 
-        Text(text = "${diaryEntry.note}", style = MaterialTheme.typography.bodyMedium)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer) // Sets the card's background color
 
 
+        ) {
+            Row(modifier = Modifier.padding(12.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                // Temperature circle on the left
+                Box(modifier = Modifier) {
+                    Text(text = "${diaryEntry.note}", style = MaterialTheme.typography.bodyMedium)
+                }
+
+            }
+        }
     }
 }
 

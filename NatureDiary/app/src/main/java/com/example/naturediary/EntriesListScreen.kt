@@ -1,17 +1,21 @@
+/**
+ * File: EntriesListScreen.kt
+ *
+ * Description: This Composable function provides the UI for displaying a list of diary entries stored in the database.
+ * It utilizes a Scaffold structure with a TopAppBar for navigation and titles. The core of the screen is a LazyColumn
+ * that dynamically loads and displays each diary entry as an individual card. These cards are interactive, allowing users
+ * to tap on an entry to navigate to a detailed view of that entry. The EntriesListViewModel is used to observe and fetch
+ * the list of entries from the database, ensuring the UI updates reactively to data changes. This screen serves as a central
+ * point for users to browse their diary entries and access specific details of each entry.
+ */
+
 package com.example.naturediary.screens
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
@@ -21,26 +25,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.naturediary.DiaryEntry
 import com.example.naturediary.EntriesListViewModel
-import java.text.SimpleDateFormat
-import java.util.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.naturediary.EntryItem
-import com.example.naturediary.temperatureColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
