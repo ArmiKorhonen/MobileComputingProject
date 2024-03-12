@@ -53,8 +53,6 @@ fun MainScreen(navController: NavController) {
         Button(onClick = { navController.navigate(Screen.EntriesListScreen.route) }, modifier = Modifier.padding(bottom = 8.dp)) {
             Text("View Entries List")
         }
-        Button(onClick = { navController.navigate(Screen.MapViewScreen.route) }, modifier = Modifier.padding(bottom = 8.dp)) {
-            Text("View Map")
-        }
+
     }
 }

@@ -30,32 +30,44 @@ import com.example.naturediary.LocationViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.room.Room
 import com.example.naturediary.DiaryEntry
 import com.example.naturediary.DiaryEntryDatabase
+import com.example.naturediary.EntriesListViewModel
 import kotlinx.coroutines.launch
+import java.net.HttpURLConnection
+import java.net.URL
+import org.json.JSONObject
+import kotlinx.coroutines.*
+import com.example.naturediary.temperatureColor
+
 
 
 @Composable
-fun AddEntryScreen(navController: NavController, locationViewModel: LocationViewModel = viewModel()) {
+fun AddEntryScreen(navController: NavController, locationViewModel: LocationViewModel = viewModel(), entriesViewModel: EntriesListViewModel = hiltViewModel()) {
 
     NatureDiaryTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            // Replace the direct call to LocationSuccessUI with AddEntryScreenContent
-            AddEntryScreenContent(navController= navController, locationViewModel = locationViewModel)
+
+            AddEntryScreenContent(navController= navController, locationViewModel = locationViewModel, entriesViewModel = entriesViewModel)
         }
     }
 }
 @Composable
-fun AddEntryScreenContent(navController: NavController, locationViewModel: LocationViewModel) {
+fun AddEntryScreenContent(navController: NavController, locationViewModel: LocationViewModel, entriesViewModel: EntriesListViewModel) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -65,11 +77,49 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
 
     val locationPair = locationViewModel.locationData.observeAsState().value
     val address = locationViewModel.addressData.observeAsState().value
+    var temperature by remember { mutableStateOf<Double?>(null) }
+
 
     locationViewModel.fetchLastLocation()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(text = "Add New Entry", style = MaterialTheme.typography.titleLarge)
+
+
+
+        locationPair?.let { pair ->
+            val location = LatLng(pair.first, pair.second)
+            LaunchedEffect(location) {
+                locationViewModel.fetchAddress(location)
+                fetchWeatherData(location.latitude, location.longitude) { temp ->
+                    temperature = temp // Update the temperature state
+                }
+
+            }
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .clip(RoundedCornerShape(10.dp))) {
+                LocationSuccessUI(location = location)
+            }
+        }
+
+
+
+        temperature?.let { temp ->
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
+                Canvas(modifier = Modifier
+                    .size(60.dp)
+                    .align(Alignment.Center)) {
+                    drawCircle(color = temperatureColor(temp))
+                }
+                Text(text = "${temp}°C", color = Color.White)
+            }
+        }
+
+        address?.let {
+            Text(text = it, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
+        }
 
         TextField(
             value = noteText,
@@ -80,37 +130,21 @@ fun AddEntryScreenContent(navController: NavController, locationViewModel: Locat
             label = { Text("Your note") }
         )
 
-        locationPair?.let { pair ->
-            val location = LatLng(pair.first, pair.second)
-            LaunchedEffect(location) {
-                locationViewModel.fetchAddress(location)
-            }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(10.dp))) {
-                LocationSuccessUI(location = location)
-            }
-        }
-
-        address?.let {
-            Text(text = it, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
-        }
-
         // Save entry button
         Button(
             onClick = {
                 scope.launch {
                     // Assuming you have a way to get an instance of your database
-                    val db = DiaryEntryDatabase.getDatabase(context)
+                    //val db = DiaryEntryDatabase.getDatabase(context)
                     val diaryEntry = DiaryEntry(
                         note = noteText,
                         latitude = locationPair?.first ?: 0.0,
                         longitude = locationPair?.second ?: 0.0,
                         address = address ?: "Address not available",
-                        timestamp = System.currentTimeMillis()
+                        timestamp = System.currentTimeMillis(),
+                        temperature = temperature ?: 0.0 //Default value
                     )
-                    db.diaryEntryDAO().insert(diaryEntry)
+                    entriesViewModel.insertEntry(diaryEntry)
                     // Set the flag to show the confirmation dialog
                     showConfirmationDialog = true
                 }
@@ -161,4 +195,25 @@ fun LocationSuccessUI(location: LatLng, modifier: Modifier = Modifier) {
         )
     }
 }
+
+fun fetchWeatherData(latitude: Double, longitude: Double, onResult: (Double?) -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val url = URL("https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current=temperature_2m,weather_code")
+        val urlConnection = url.openConnection() as HttpURLConnection
+        try {
+            val data = urlConnection.inputStream.bufferedReader().readText()
+            val jsonObject = JSONObject(data)
+            val currentWeather = jsonObject.getJSONObject("current")
+            val temperature = currentWeather.getDouble("temperature_2m")
+            withContext(Dispatchers.Main) {
+                onResult(temperature) // Call the callback with the temperature
+            }
+        } finally {
+            urlConnection.disconnect()
+        }
+    }
+}
+
+
+
 

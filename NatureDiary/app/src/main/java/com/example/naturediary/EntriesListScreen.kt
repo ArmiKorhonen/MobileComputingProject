@@ -1,8 +1,14 @@
 package com.example.naturediary.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.material3.Button
@@ -17,12 +23,15 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.naturediary.DiaryEntry
 import com.example.naturediary.EntriesListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.naturediary.temperatureColor
+
 
 
 
@@ -52,12 +61,37 @@ fun EntriesListScreen(navController: NavController, viewModel: EntriesListViewMo
 @Composable
 fun EntryItem(entry: DiaryEntry, onClick: () -> Unit) {
     val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-    Card(modifier = Modifier.padding(vertical = 4.dp).clickable(onClick = onClick)) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Date: ${sdf.format(Date(entry.timestamp))}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "Address: ${entry.address}", style = MaterialTheme.typography.bodySmall)
+    Card(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .clickable(onClick = onClick)
+    ) {
+        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            // Temperature circle on the left
+            Box(modifier = Modifier.size(60.dp)) {
+                Canvas(modifier = Modifier.matchParentSize()) {
+                    drawCircle(color = temperatureColor(entry.temperature))
+                }
+                // Text is absolutely positioned to be centered within the Box
+                Text(
+                    text = "${entry.temperature}°C",
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Date, time, and address on the right
+            Column {
+                Text(text = sdf.format(Date(entry.timestamp)), style = MaterialTheme.typography.titleLarge)
+                Text(text = entry.address, style = MaterialTheme.typography.bodyLarge)
+            }
         }
     }
 }
+
+
 
 
